@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Auri Autopeças | Feedback </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Estilos para a tag html e body para preencher a tela */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Estilos gerais para o contêiner e inputs */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1A1A1A; /* Fundo escuro principal */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Alinha o card no topo se ele for muito longo */
+            min-height: 100vh; /* Permite que o body tenha a altura mínima de 100% da tela */
+            padding: 1.5rem; /* Espaçamento ao redor do card */
+            box-sizing: border-box; /* Garante que padding e borda não aumentem o tamanho total */
+            overflow-y: auto; /* Permite rolagem se o conteúdo for maior que a tela */
+            color: #AAAAAA; /* Cor padrão para textos menos importantes ou cinzas */
+        }
+
+        .screen-container {
+            background-color: #b31e1e; /* Fundo do card vermelho */
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.2); /* Sombra ajustada para fundo escuro */
+            padding: 3rem 2rem;
+            max-width: 500px; /* Mantém a largura do formulário */
+            width: 100%;
+            text-align: center;
+            animation: fadeIn 0.5s ease-in-out;
+            height: fit-content;
+            margin: auto; /* Centraliza verticalmente se o conteúdo for pequeno */
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Estilos compartilhados entre as telas */
+        .header-main-content { /* Contêiner principal para logo e bloco de texto */
+            display: flex;
+            align-items: center; /* Alinha verticalmente logo e o bloco de texto */
+            justify-content: center; /* Alinha o conteúdo ao centro */
+            gap: 1.5rem; /* Espaçamento entre a logo e o bloco de texto */
+            margin-bottom: 0.5rem; /* Ajusta a margem abaixo do grupo */
+        }
+
+        .header-text-block { /* Estilo para o contêiner do nome e tagline */
+            display: flex;
+            flex-direction: column; /* Organiza os elementos em coluna */
+            align-items: flex-start; /* Alinha o texto à esquerda dentro do bloco */
+            text-align: left; /* Garante alinhamento do texto */
+        }
+
+        .logo-img { /* Estilo específico para a logo */
+            width: 240px;
+            height: 120px;
+            flex-shrink: 0; /* Impede que a imagem encolha */
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            line-height: 1;
+            color: #FFD700; /* Ouro */
+            margin-bottom: 0; /* Remove margem de baixo para alinhar com a tagline */
+        }
+        .tagline {
+            font-size: 1rem;
+            color: #DAA520; /* Ouro um pouco mais suave */
+            margin-top: 0.1rem; /* Diminui um pouco a margem superior */
+            margin-bottom: 2rem; /* Margem original para a tagline em relação ao próximo bloco */
+            line-height: 1.1; /* Diminui o espaço entre as linhas */
+        }
+        .message-container {
+            text-align: left; /* Alinhamento padrão à esquerda para os textos */
+            margin-bottom: 2.5rem;
+        }
+        .main-button {
+            width: 100%;
+            background-color: #DAA520; /* Cor de ouro para o botão */
+            color: #1A1A1A; /* Texto do botão em cor escura */
+            font-weight: 700;
+            padding: 1.2rem 1.5rem;
+            border-radius: 0.75rem;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .main-button:hover {
+            background-color: #FFD700; /* Efeito hover mais claro para ouro */
+            transform: translateY(-2px);
+        }
+
+        /* Estilos específicos para o relatório */
+        .report-item {
+            background-color: #3C3C3C; /* Fundo mais escuro para cada item do relatório */
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #555555;
+            text-align: left; /* Garante que o texto de cada item esteja à esquerda */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.15);
+            position: relative; /* Necessário para posicionar a datahora absoluta */
+            padding-bottom: 2.5rem; /* Adiciona espaço extra na parte inferior para a datahora */
+        }
+        .report-item p {
+            margin-bottom: 0.5rem;
+            color: #E0E0E0; /* Cor do texto dentro dos itens do relatório */
+            word-wrap: break-word; /* Garante que textos longos quebrem a linha */
+        }
+        .report-item p:last-child {
+            margin-bottom: 0;
+        }
+        /* MODIFICAÇÃO: Labels agora são blocos */
+        .report-item strong {
+            color: #FFD700; /* Destaque em ouro para os rótulos */
+            display: block; /* Faz a label ocupar sua própria linha */
+            margin-bottom: 0.25rem; /* Adiciona um pequeno espaçamento abaixo da label */
+        }
+        .report-item .value {
+            color: #AAAAAA; /* Valor do dado em cinza claro */
+        }
+
+        /* Estilo específico para labels amarelas (como Causa Judicial e Fato Ocorrido) */
+        /* MODIFICAÇÃO: Labels amarelas também são blocos */
+        .report-item .label-yellow {
+            color: #FFD700; /* Cor ouro para a label */
+            font-weight: bold; /* Para manter o negrito como em 'Causa Judicial' */
+            display: block; /* Faz a label ocupar sua própria linha */
+            margin-bottom: 0.25rem; /* Adiciona um pequeno espaçamento abaixo da label */
+        }
+
+        /* Estilo para a data/hora dentro do card */
+        .report-timestamp {
+            position: absolute; /* Posição absoluta dentro do .report-item */
+            bottom: 0.75rem; /* 0.75rem da parte inferior do card */
+            right: 1.5rem; /* 1.5rem da direita do card (igual ao padding do card) */
+            font-size: 0.75rem; /* Fonte menor */
+            color: #BBBBBB; /* Cor branca suave */
+            opacity: 0.7; /* Discreto */
+            z-index: 10; /* Garante que fique acima de outros elementos se houver sobreposição */
+            white-space: nowrap; /* Evita quebra de linha */
+        }
+
+
+        /* Estilos de texto para os parágrafos e títulos */
+        .text-xl.font-semibold.text-gray-800 {
+            color: #FFD700 !important; /* Cor ouro forçada para esses títulos */
+        }
+        .text-gray-600.leading-relaxed {
+            color: #AAAAAA !important; /* Cinza claro para legibilidade no fundo escuro */
+        }
+
+        /* Estilos do Spinner */
+        .hidden-spinner {
+            display: none !important;
+        }
+
+        #loadingSpinner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+        .spinner {
+            border: 8px solid #3C3C3C;
+            border-top: 8px solid #FFD700;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Estilos para o dropdown dentro do item de relatório */
+        .input-box {
+            background-color: #4C4C4C; /* Fundo mais escuro para inputs/selects */
+            border: 1px solid #5C5C5C;
+            color: #E0E0E0; /* Cor do texto dentro do input */
+            padding: 0.8rem 1rem;
+            border-radius: 0.5rem;
+            width: 100%;
+            box-sizing: border-box; /* Inclui padding e borda no tamanho total */
+            transition: border-color 0.3s, box-shadow 0.3s;
+            -webkit-appearance: none; /* Remove estilo padrão do navegador para select */
+            -moz-appearance: none; /* Remove estilo padrão do navegador para select */
+            appearance: none; /* Remove estilo padrão do navegador para select */
+            padding-right: 2.5rem; /* Espaço para a seta customizada */
+        }
+        .input-box:focus {
+            outline: none;
+            border-color: #FFD700; /* Ouro ao focar */
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3); /* Sombra de foco dourada */
+        }
+        /* Estilo para o wrapper do select para adicionar uma seta customizada */
+        .select-wrapper {
+            position: relative;
+            width: 100%;
+            margin-top: 0.5rem; /* Espaçamento após o label */
+        }
+        .select-wrapper::after {
+            content: '▼'; /* Caractere de seta */
+            font-size: 0.8em;
+            color: #FFD700; /* Cor da seta em ouro */
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            position: absolute;
+            pointer-events: none; /* Garante que a seta não capture cliques */
+        }
+
+        /* Estilos do Modal de Detalhes */
+        #detailsModal {
+            backdrop-filter: blur(8px); /* Efeito de blur no fundo */
+            -webkit-backdrop-filter: blur(8px);
+        }
+        #detailsModal .screen-container {
+            padding: 2.5rem; /* Ajuste o padding para o modal */
+        }
+
+        /* Estilo para o botão de exclusão */
+        .delete-button {
+            /* Classes Tailwind CSS */
+            @apply mt-4 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition duration-200 w-full; 
+        }
+
+        /* Container para a Ordem e Nome para usar Flexbox */
+        .order-name-container {
+            display: flex;
+            justify-content: space-between; /* Alinha o primeiro item à esquerda e o último à direita */
+            align-items: baseline; /* Alinha pela base do texto */
+            margin-bottom: 0.5rem; /* Espaçamento entre este container e o próximo parágrafo */
+        }
+
+        /* Para o número da ordem */
+        .order-number {
+            font-size: 0.9em; /* Um pouco menor */
+            color: #FFD700; /* Cor ouro para destaque */
+            font-weight: 600; /* Um pouco mais negrito */
+            white-space: nowrap; /* Evita quebra de linha em números longos */
+        }
+
+        /* Estilos para os filtros */
+        .filter-container {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        .filter-container label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #E0E0E0;
+            font-weight: 500;
+        }
+        .filter-group { /* Para agrupar filtros de data */
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap; /* Permite que os itens quebrem a linha se não houver espaço */
+        }
+        .filter-group > div {
+            flex: 1; /* Faz com que os itens do grupo ocupem espaço igual em telas maiores */
+            min-width: calc(50% - 0.5rem); /* Garante que em telas menores, cada um ocupe quase metade */
+        }
+
+        /* Media query para telas menores que 640px (pode ajustar o breakpoint) */
+        @media (max-width: 640px) {
+            .filter-group {
+                flex-direction: column; /* Coloca os campos de data em coluna em telas menores */
+                gap: 0.75rem; /* Diminui o espaçamento entre eles */
+            }
+            .filter-group > div {
+                min-width: 100%; /* Cada campo de data ocupa a largura total */
+            }
+            .input-box {
+                padding: 0.7rem 0.9rem; /* Diminui um pouco o padding dos inputs em geral */
+            }
+            .screen-container {
+                padding: 2rem 1rem; /* Ajusta o padding do container principal para telas menores */
+                border-radius: 1rem; /* Ajusta o arredondamento */
+            }
+            .logo-img {
+                width: 360px;
+                height: 120px;
+            }
+            .logo-text {
+                font-size: 1.3rem;
+            }
+            .tagline {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="screen-container" id="reportScreen">
+
+        <div class="mb-10">
+            <div class="header-main-content"> <img src="logo1.png" alt="Logo Lex Juris" class="logo-img">
+                <div class="header-text-block"> <div class="logo-text"></div>
+                    <div class="tagline"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="message-container">
+            <p class="text-xl font-semibold text-gray-800 mb-4 text-center">
+                Relatório de Feedbacks <span id="recordCount" class="text-yellow-400 text-base">(0 Registros)</span>
+            </p>
+            <p class="text-gray-600 leading-relaxed text-center mb-6">
+                Aqui você encontrará o registro dos Feedbacks realizados. Clique em um item para ver detalhes.
+            </p>
+        </div>
+
+        <div class="filter-container">
+            <label for="statusFilter">Filtrar por Status:</label>
+            <div class="select-wrapper mb-4"> <select id="statusFilter" class="input-box">
+                    <option value="Todos">Todos os Status</option>
+                    <option value="Cliente já Contactado">Cliente já Contactado</option>
+                    <option value="Cliente Agendou Visita">Cliente Agendou Visita</option>
+                    <option value="Contato Inválido">Contato Inválido</option>
+                    <option value="Cliente Contatado com Sucesso">Cliente Contatado com Sucesso</option>
+                    <option value="Cliente Desistiu da Ação">Cliente Desistiu da Ação</option>
+                </select>
+            </div>
+
+            <label>Filtrar por Período de Registro:</label>
+            <div class="filter-group">
+                <div>
+                    <label for="dataInicioFilter" class="text-sm text-gray-400">De:</label>
+                    <input type="date" id="dataInicioFilter" class="input-box">
+                </div>
+                <div>
+                    <label for="dataFimFilter" class="text-sm text-gray-400">Até:</label>
+                    <input type="date" id="dataFimFilter" class="input-box">
+                </div>
+            </div>
+        </div>
+
+        <div id="reportDataContainer" class="text-left space-y-4">
+            <p id="noDataMessage" class="text-gray-600 text-center hidden">Nenhum Feedback  encontrado ainda.</p>
+            <p id="errorMessage" class="text-red-400 text-center hidden">Ocorreu um erro ao carregar os dados. Por favor, tente novamente.</p>
+        </div>
+
+        <button id="refreshReportBtn" class="main-button mt-8">
+            Atualizar Relatório
+        </button>
+    </div>
+
+    <div id="detailsModal" class="hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50">
+        <div class="screen-container max-w-lg w-full relative">
+            <button id="closeDetailsModalBtn" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl font-bold">&times;</button>
+            
+            <h3 class="text-2xl font-bold text-yellow-400 mb-6 text-center">Detalhes do Feedback </h3>
+
+            <div class="text-left space-y-4 mb-6">
+                <p class="text-gray-300"><strong>Ordem:</strong> <span id="detailOrdem" class="text-gray-400"></span></p>
+                <p class="text-xl font-bold text-yellow-300 mb-2" id="detailNome"></p>
+                <p class="text-gray-300"><strong>Telefone:</strong> <span id="detailTelefone" class="text-gray-400"></span></p>
+                <p class="text-gray-300"><strong class="label-yellow">Loja onde esteve:</strong> <span id="detailCausa" class="text-gray-400"></span></p>
+                <p class="text-gray-300"><strong class="label-yellow">Fato Ocorrido:</strong> <span id="detailCampo3" class="text-gray-400"></span></p>
+                <p class="text-gray-300"><strong></strong> <span id="detailOutro" class="text-gray-400"></span></p>
+                <p class="text-gray-300"><strong>Status:</strong> <span id="detailcampo1" class="text-gray-400"></span></p>
+                <p class="text-gray-300"><strong>Data/Hora Registro:</strong> <span id="detailDataHora" class="text-gray-400"></span></p>
+            </div>
+
+            <button id="closeDetailsBtnBottom" class="main-button">Fechar</button>
+        </div>
+    </div>
+
+    <div id="loadingSpinner" class="hidden-spinner">
+        <div class="spinner"></div>
+    </div>
+
+    <script>
+        // Adicionado: Verifica se o script já foi executado
+        if (window.__reportScriptLoaded) {
+            console.warn("Script de relatório já carregado. Ignorando múltiplas execuções.");
+        }
+        window.__reportScriptLoaded = true;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const reportDataContainer = document.getElementById('reportDataContainer');
+            const noDataMessage = document.getElementById('noDataMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            const refreshReportBtn = document.getElementById('refreshReportBtn');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const recordCountSpan = document.getElementById('recordCount');    
+            const statusFilterSelect = document.getElementById('statusFilter');    
+            const dataInicioFilter = document.getElementById('dataInicioFilter');
+            const dataFimFilter = document.getElementById('dataFimFilter');
+            
+            // Elementos do Modal de Detalhes
+            const detailsModal = document.getElementById('detailsModal');
+            const closeDetailsModalBtn = document.getElementById('closeDetailsModalBtn');
+            const closeDetailsBtnBottom = document.getElementById('closeDetailsBtnBottom');
+            const detailOrdem = document.getElementById('detailOrdem');
+            const detailNome = document.getElementById('detailNome');
+            const detailTelefone = document.getElementById('detailTelefone');
+            const detailCausa = document.getElementById('detailCausa');
+            const detailCampo3 = document.getElementById('detailCampo3'); // NOVO: Referência para o campo3 no modal
+            const detailOutro = document.getElementById('detailOutro');
+            const detailcampo1 = document.getElementById('detailcampo1');
+            const detailDataHora = document.getElementById('detailDataHora');
+
+            // IMPORTANTE: COLOQUE A URL DO SEU WEB APP AQUI (a que você copiou após a implantação)
+            // Certifique-se de que esta URL está ATUALIZADA após a última implantação do seu Apps Script.
+            const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbylW8hO_a2X7Aws1lvNRD_YnrbxODFQaNf8sPszefjksudbizg-wg8-CNhEV6ha1OiPzw/exec';    
+
+            // --- FUNÇÕES AUXILIARES PARA MOSTRAR/ESCONDER SPINNER ---
+            function showSpinner() {
+                loadingSpinner.classList.remove('hidden-spinner');
+            }
+
+            function hideSpinner() {
+                loadingSpinner.classList.add('hidden-spinner');
+            }
+
+            // --- FUNÇÃO PARA FORMATAR TELEFONE ---
+            const formatarTelefoneExibicao = (telefone) => {
+                if (!telefone) return '';
+                let value = String(telefone).replace(/\D/g, '');    
+                let formattedValue = '';
+
+                if (value.length > 0) {
+                    formattedValue = '(' + value.substring(0, 2);
+                }
+                if (value.length > 2) {
+                    if (value.length === 11) {    
+                        formattedValue += ') ' + value.substring(2, 7);
+                        if (value.length > 7) {
+                            formattedValue += '-' + value.substring(7, 11);
+                        }
+                    } else {    
+                        formattedValue += ') ' + value.substring(2, 6);
+                        if (value.length > 6) {
+                            formattedValue += '-' + value.substring(6, 10);
+                        }
+                    }
+                }
+                return formattedValue;
+            };
+
+            // --- FUNÇÃO: FORMATAR NÚMERO DA ORDEM COM ZEROS À ESQUERDA ---
+            const formatarOrdem = (ordem) => {
+                // Converte para string e preenche com zeros à esquerda até 4 dígitos
+                // Garante que 'ordem' é um número antes de formatar
+                return String(parseInt(ordem, 10) || 0).padStart(4, '0');
+            };
+
+            // --- FUNÇÃO PARA ATUALIZAR campo1 NA PLANILHA ---
+            async function updatecampo1(rowIndex, newcampo1Value) {
+                showSpinner();
+                try {
+                    const response = await fetch(WEB_APP_URL, {
+                        method: 'POST',
+                        mode: 'cors',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: new URLSearchParams({
+                            action: 'updatecampo1',    
+                            rowIndex: rowIndex,
+                            newcampo1Value: newcampo1Value
+                        }).toString()
+                    });
+
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        throw new Error(`Erro na rede ou servidor: ${response.status} ${response.statusText} - ${errorText}`);
+                    }
+
+                    const result = await response.json();
+                    console.log('Resposta da atualização:', result);
+
+                    if (result.success) {
+                        console.log('Status atualizado com sucesso! Recarregando dados...');
+                        // Após a atualização, recarregue os dados para refletir a mudança
+                        // Passa os status e datas atuais dos filtros para manter a visualização
+                        loadReportData(statusFilterSelect.value, dataInicioFilter.value, dataFimFilter.value);    
+                    } else {
+                        alert('Erro ao atualizar o status: ' + result.message);
+                    }
+
+                } catch (error) {
+                    console.error('Erro ao enviar a atualização:', error);
+                    alert('Ocorreu um erro ao tentar salvar as alterações. Tente novamente.');
+                } finally {
+                    hideSpinner();
+                }
+            }
+
+            // --- FUNÇÃO PARA EXCLUIR LINHA NA PLANILHA ---
+            async function deleteRow(rowIndex, nomeCliente, ordemCliente) {
+                if (!confirm(`Tem certeza que deseja excluir o Feedback de "${nomeCliente}" (Ordem: ${formatarOrdem(ordemCliente)})?`)) {    
+                    return;    
+                }
+
+                showSpinner();
+                try {
+                    const response = await fetch(WEB_APP_URL, {
+                        method: 'POST',
+                        mode: 'cors',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: new URLSearchParams({
+                            action: 'deleteRow',    
+                            rowIndex: rowIndex
+                        }).toString()
+                    });
+
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        throw new Error(`Erro na rede ou servidor: ${response.status} ${response.statusText} - ${errorText}`);
+                    }
+
+                    const result = await response.json();
+                    console.log('Resposta da exclusão:', result);
+
+                    if (result.success) {
+                        alert('Registro excluído com sucesso!');
+                        // Após a exclusão, recarregue os dados para remover o card
+                        loadReportData(statusFilterSelect.value, dataInicioFilter.value, dataFimFilter.value);    
+                    } else {
+                        alert('Erro ao excluir o registro: ' + result.message);
+                    }
+
+                } catch (error) {
+                    console.error('Erro ao enviar a exclusão:', error);
+                    alert('Ocorreu um erro ao tentar excluir o registro. Tente novamente.');
+                } finally {
+                    hideSpinner();
+                }
+            }
+
+
+            // --- FUNÇÃO PARA CARREGAR E EXIBIR OS DADOS ---
+            async function loadReportData(filterStatus = 'Todos', filterDataInicio = '', filterDataFim = '') {    
+                console.log("Iniciando loadReportData com filtro de status:", filterStatus, " e datas:", filterDataInicio, " - ", filterDataFim);
+                recordCountSpan.textContent = '(0 Registros)';    
+                reportDataContainer.innerHTML = '';    
+                noDataMessage.classList.add('hidden');
+                errorMessage.classList.add('hidden');
+                showSpinner();
+
+                try {
+                    const response = await fetch(WEB_APP_URL, {
+                        method: 'GET',
+                        mode: 'cors'
+                    });
+
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        throw new Error(`Erro na rede ou servidor: ${response.status} ${response.statusText} - ${errorText}`);
+                    }
+
+                    const result = await response.json();
+                    console.log('Dados recebidos do Apps Script:', result);
+
+                    if (result.success && result.data) {
+                        let filteredData = result.data;
+
+                        // 1. Aplica o filtro de status
+                        if (filterStatus !== 'Todos' && filterStatus !== '') {
+                            filteredData = filteredData.filter(item => item.campo1 === filterStatus);
+                            console.log(`Dados filtrados por status "${filterStatus}":`, filteredData);
+                        }
+
+                        // 2. Aplica o filtro de data (se houver)
+                        if (filterDataInicio || filterDataFim) {
+                            const dataInicio = filterDataInicio ? new Date(filterDataInicio + 'T00:00:00') : null;
+                            const dataFim = filterDataFim ? new Date(filterDataFim + 'T23:59:59') : null;
+
+                            filteredData = filteredData.filter(item => {
+                                // item.datahora deve vir em um formato que Date() possa parsear (ex: "YYYY-MM-DD HH:MM:SS" ou timestamp)
+                                if (!item.datahora) {
+                                    console.warn("Item sem datahora:", item);
+                                    return false; // Ignora itens sem data de registro válida
+                                }
+
+                                const itemDate = new Date(item.datahora);
+                                
+                                // Verifica se a data é válida
+                                if (isNaN(itemDate.getTime())) {
+                                    console.warn("Data de registro inválida para o item:", item.datahora, item);
+                                    return false;    
+                                }
+                                
+                                let passaNoFiltro = true;
+
+                                if (dataInicio && itemDate < dataInicio) {
+                                    passaNoFiltro = false;
+                                }
+                                if (dataFim && itemDate > dataFim) {
+                                    passaNoFiltro = false;
+                                }
+                                return passaNoFiltro;
+                            });
+                            console.log(`Dados filtrados por data (${filterDataInicio} a ${filterDataFim}):`, filteredData);
+                        }
+
+
+                        recordCountSpan.textContent = `(${filteredData.length} Registros)`;    
+
+                        if (filteredData.length > 0) {
+                            filteredData.forEach(item => {
+                                const cardId = `report-item-${item.rowIndex}`;
+                                
+                                // Esta verificação de ID no DOM é para evitar duplicação em cenários específicos,
+                                // mas se loadReportData limpa o container, ela pode ser menos crítica.
+                                // Mantenho por segurança.
+                                if (document.getElementById(cardId)) {
+                                    console.log(`Card com ID ${cardId} já existe. Ignorando criação duplicada.`);
+                                    return;    
+                                }
+
+                                const itemDiv = document.createElement('div');
+                                itemDiv.classList.add('report-item');
+                                itemDiv.style.cursor = 'pointer';    
+                                itemDiv.id = cardId;    
+                                itemDiv.setAttribute('data-row-index', item.rowIndex);    
+                                
+                                itemDiv.dataset.itemData = JSON.stringify(item);
+
+                                const ordem = item.ordem; // <--- AQUI É O PONTO CRÍTICO: GARANTIR QUE 'item.ordem' VENHA CORRETO DO APPS SCRIPT
+                                // Adicionado log para verificar o valor da ordem antes de renderizar
+                                console.log(`Processando item com Ordem: ${ordem}, Nome: ${item.nome}, rowIndex: ${item.rowIndex}`);
+                                
+                                const nome = item.nome || 'N/A';            
+                                const telefone = item.telefone ? formatarTelefoneExibicao(item.telefone) : 'N/A';    
+                                const causa = item.causa || 'N/A';            
+                                const campo3 = item.campo3 || 'N/A'; // NOVO: Obter o valor de campo3
+                                const outro = item.outro || '';                
+                                const campo1Atual = item.campo1 || '';        
+                                const dataHora = item.datahora ? new Date(item.datahora).toLocaleString('pt-BR') : 'N/A';    
+
+                                const dropdownHtml = `
+                                    <div class="mt-4">
+                                        <label for="campo1-${item.rowIndex}" class="form-label text-sm text-gray-400">Status do Feedback :</label>
+                                        <div class="select-wrapper">
+                                            <select id="campo1-${item.rowIndex}" class="input-box select-campo1" data-row-index="${item.rowIndex}">
+                                                <option value="" disabled ${campo1Atual === '' ? 'selected' : ''}>Selecione um status</option>
+                                                <option value="Cliente já Contactado" ${campo1Atual === 'Cliente já Contactado' ? 'selected' : ''}>Cliente já Contactado</option>
+                                                <option value="Cliente Agendou Visita" ${campo1Atual === 'Cliente Agendou Visita' ? 'selected' : ''}>Cliente Agendou Visita</option>
+                                                <option value="Contato Inválido" ${campo1Atual === 'Contato Inválido' ? 'selected' : ''}>Contato Inválido</option>
+                                                <option value="Cliente Contatado com Sucesso" ${campo1Atual === 'Cliente Contatado com Sucesso' ? 'selected' : ''}>Cliente Contatado com Sucesso</option>
+                                                <option value="Cliente Desistiu da Ação" ${campo1Atual === 'Cliente Desistiu da Ação' ? 'selected' : ''}>Cliente Desistiu da Ação</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                `;
+
+                                itemDiv.innerHTML = `
+                                    <div class="order-name-container">
+                                        <p class="text-xl font-semibold text-yellow-300"><strong>${nome}</strong></p>    
+                                        <p class="order-number">#${formatarOrdem(ordem)}</p>
+                                    </div>
+                                    <p class="text-gray-300"><strong>Telefone:</strong> <span class="value">${telefone}</span></p>
+                                    <p class="text-gray-300"><strong class="label-yellow">Loja onde esteve:</strong> <span class="value">${causa}</span></p>
+                                    <p class="text-gray-300"><strong class="label-yellow">Fato Ocorrido:</strong> <span class="value">${campo3}</span></p> 
+                                    <p class="text-gray-300"><strong></strong> <span class="value">${outro}</span></p>
+                                    ${dropdownHtml}
+                                    <button class="delete-button" data-row-index="${item.rowIndex}" data-nome="${nome}" data-ordem="${ordem}">Excluir</button>
+                                    <span class="report-timestamp">${dataHora}</span> `;
+                                reportDataContainer.appendChild(itemDiv);
+
+                                // Adiciona event listener para abrir o modal de detalhes
+                                itemDiv.addEventListener('click', function(event) {
+                                    // Evita que o clique no select ou botão de exclusão abra o modal
+                                    if (event.target.closest('.select-campo1') || event.target.closest('.delete-button')) {
+                                        return;
+                                    }
+                                    const itemData = JSON.parse(this.dataset.itemData);
+                                    detailOrdem.textContent = formatarOrdem(itemData.ordem);
+                                    detailNome.textContent = itemData.nome;
+                                    detailTelefone.textContent = formatarTelefoneExibicao(itemData.telefone);
+                                    detailCausa.textContent = itemData.causa;
+                                    detailCampo3.textContent = itemData.campo3; // Define o valor do novo campo
+                                    detailOutro.textContent = itemData.outro;
+                                    detailcampo1.textContent = itemData.campo1;
+                                    detailDataHora.textContent = itemData.datahora ? new Date(itemData.datahora).toLocaleString('pt-BR') : 'N/A';
+                                    detailsModal.classList.remove('hidden');
+                                });
+                            });
+
+                            // Adiciona event listeners para os dropdowns de status
+                            document.querySelectorAll('.select-campo1').forEach(selectElement => {
+                                selectElement.addEventListener('change', function() {
+                                    const rowIndex = this.dataset.rowIndex;
+                                    const newcampo1Value = this.value;
+                                    console.log(`Dropdown alterado: rowIndex=${rowIndex}, novo valor=${newcampo1Value}`);
+                                    updatecampo1(rowIndex, newcampo1Value);
+                                });
+                            });
+
+                            // Adiciona event listeners para os botões de exclusão
+                            document.querySelectorAll('.delete-button').forEach(button => {
+                                button.addEventListener('click', function() {
+                                    const rowIndex = this.dataset.rowIndex;
+                                    const nomeCliente = this.dataset.nome;
+                                    const ordemCliente = this.dataset.ordem;
+                                    deleteRow(rowIndex, nomeCliente, ordemCliente);
+                                });
+                            });
+
+                        } else {
+                            noDataMessage.classList.remove('hidden');
+                        }
+                    } else {
+                        errorMessage.classList.remove('hidden');
+                        console.error('Erro na resposta do Apps Script:', result.message || 'Dados vazios ou formato inesperado.');
+                    }
+
+                } catch (error) {
+                    console.error('Erro ao carregar os dados do relatório:', error);
+                    errorMessage.classList.remove('hidden');
+                    alert('Não foi possível carregar o relatório. Verifique sua conexão ou a URL do Apps Script.');
+                } finally {
+                    hideSpinner();
+                }
+            }
+
+            // --- LISTENERS DE EVENTOS ---
+            refreshReportBtn.addEventListener('click', () => {
+                loadReportData(statusFilterSelect.value, dataInicioFilter.value, dataFimFilter.value);
+            });
+
+            statusFilterSelect.addEventListener('change', () => {
+                loadReportData(statusFilterSelect.value, dataInicioFilter.value, dataFimFilter.value);
+            });
+
+            dataInicioFilter.addEventListener('change', () => {
+                loadReportData(statusFilterSelect.value, dataInicioFilter.value, dataFimFilter.value);
+            });
+
+            dataFimFilter.addEventListener('change', () => {
+                loadReportData(statusFilterSelect.value, dataInicioFilter.value, dataFimFilter.value);
+            });
+
+            closeDetailsModalBtn.addEventListener('click', () => {
+                detailsModal.classList.add('hidden');
+            });
+            closeDetailsBtnBottom.addEventListener('click', () => {
+                detailsModal.classList.add('hidden');
+            });
+
+            // Carrega os dados na primeira vez que a página é carregada
+            loadReportData();
+        });
+    </script>
+</body>
+</html>
